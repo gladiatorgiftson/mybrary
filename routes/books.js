@@ -5,15 +5,14 @@ const fs = require('fs')
 const Book = require('../models/book');
 const Author = require('../models/authors')
 const uploadPath = path.join('public',Book.coverImageBasepath)
-const multer = require('multer');
 const { connected } = require('process');
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
-const upload = multer({
-    dest: uploadPath,
-    fileFilter: (req, file, callback) => {
-      callback(null, imageMimeTypes.includes(file.mimetype))
-    }
-  })
+// const upload = multer({
+//     dest: uploadPath,
+//     fileFilter: (req, file, callback) => {
+//       callback(null, imageMimeTypes.includes(file.mimetype))
+//     }
+//   })
   
 //All Books route
 router.get('/', async(req, res) => {
@@ -47,7 +46,7 @@ router.get('/new', async(req, res) => {
 
 
 //create  Books route
-router.post('/', upload.single('cover'),async(req, res) => {
+router.post('/', async(req, res) => {
     const fileName =  req.file != null ? req.file.filename : null
     console.log(fileName)
     const book = new Book({
@@ -59,6 +58,7 @@ router.post('/', upload.single('cover'),async(req, res) => {
         description : req.body.description
 
     })
+    saveCover(book, req.body.cover)
 
     try {
         const newBook = await book.save()
@@ -100,5 +100,8 @@ function removeBookCover(fileName){
         if (err) console.error(err)
     })
 }
+
+
+
 
 module.exports = router; 
