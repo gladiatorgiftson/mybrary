@@ -86,8 +86,7 @@ router.post('/', async(req, res) => {
         let author;
         try {
             author = await Author.findById(req.params.id)
-            author.name = req.body.name
-            await author.save()
+            await author.remove()
             res.redirect(`/authors/${author.id}`)
             
         } catch  {
