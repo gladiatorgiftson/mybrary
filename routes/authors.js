@@ -83,21 +83,18 @@ router.post('/', async(req, res) => {
 
     // delete author
     router.delete('/:id', async (req, res) => {
-        let author;
+        let author
         try {
-            author = await Author.findById(req.params.id)
-            await author.remove()
-            res.redirect(`/authors`)
-            
-        } catch  {
-            if (author == null){
-                res.redirect('/')
-            } else {
-                res.redirect(`authors/${author.id}`)
-            }
-            
+          author = await Author.findById(req.params.id)
+          await author.remove()
+          res.redirect('/authors')
+        } catch {
+          if (author == null) {
+            res.redirect('/')
+          } else {
+            res.redirect(`/authors/${author.id}`)
+          }
         }
-    });
-
+      })
 
 module.exports = router; 

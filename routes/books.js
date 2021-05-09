@@ -10,7 +10,7 @@ const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
 //All Books route
 router.get('/', async(req, res) => {
     let query = Book.find()
-    console.log(req.query.publishedBefore)
+
     if (req.query.title != null && req.query.title != ''){
         query = query.regex('title', new RegExp(req.query.title, 'i'))
     }
@@ -84,12 +84,11 @@ async function renderNewPage(res, book, hasError= false){
 
 
 async function saveCover(book, coverEncoded){
-    console.log("function called sucessful")
+
     if (coverEncoded == null) return
     const cover = JSON.parse(coverEncoded)
     if (cover != null && imageMimeTypes.includes(cover.type))
     { 
-        console.log("here it also executed")
         book.coverImage = new Buffer.from(cover.data, 'base64')
         book.coverImageType = cover.type
     }
