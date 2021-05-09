@@ -14,11 +14,9 @@ router.get('/', async(req, res) => {
             authors : authors,
             searchOptions : req.query
         })
-        console.log(searchOptions)
     } catch (error) {
         res.redirect('/')
     }
-    // res.render('authors/index')
 });
 
 //new authours route
@@ -35,9 +33,7 @@ router.post('/', async(req, res) => {
     try {
 
         const newAuthour = await author.save()
-            // res.redirect(`authours/${newAuthour.id}`)
-        
-        res.redirect(`authors`)
+        res.redirect(`authors/${newAuthour.id}`)
         
     } catch  {
         res.render('authors/new', {
@@ -45,6 +41,67 @@ router.post('/', async(req, res) => {
         errorMessage : 'This is a error'
         });
     }
-});
+    });
+
+    router.get('/:id', (req, res) => {
+        res.send('Show Author ' + req.params.id)
+    });
+
+    router.get('/:id/edit', async(req, res) => {
+        try{
+            console.log(req.params.id)
+            const author = await Author.findById(req.params.id)
+            res.render('authors/edit', { author: author })       
+        }
+        catch{
+            res.redirect('/authors')
+        }
+        
+    });
+
+    //update author name
+    router.put('/:id', async (req, res) => {
+        let author;
+        try {
+            author = await Author.findById(req.params.id)
+            author.name = req.body.name
+            await author.save()
+            res.redirect(`/authors/${author.id}`)
+            
+        } catch  {
+            if (author == null){
+                res.redirect('/')
+            } else {
+                res.render('authors/edit', {
+                    author : author,
+                    errorMessage : 'Error Updating author'
+                });
+            }
+            
+        }
+    });
+
+    // delete author
+    router.delete('/:id', async (req, res) => {
+        let author;
+        try {
+            author = await Author.findById(req.params.id)
+            author.name = req.body.name
+            await author.save()
+            res.redirect(`/authors/${author.id}`)
+            
+        } catch  {
+            if (author == null){
+                res.redirect('/')
+            } else {
+                res.render('authors/edit', {
+                    author : author,
+                    errorMessage : 'Error Updating author'
+                });
+            }
+            
+        }
+    });
+
 
 module.exports = router; 
