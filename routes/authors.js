@@ -89,7 +89,8 @@ router.post('/', async(req, res) => {
           res.redirect('/authors')
         } catch {
           if (author == null) {
-            res.redirect('/')
+              console.log(author)
+              res.redirect('/')
           } else {
             res.redirect(`/authors/${author.id}`)
           }
