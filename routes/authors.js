@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Author = require('../models/authors');
+const Books = require('../models/book')
 
 //all authours route
 router.get('/', async(req, res) => {
@@ -43,10 +44,22 @@ router.post('/', async(req, res) => {
     }
     });
 
-    router.get('/:id', (req, res) => {
-        res.send('Show Author ' + req.params.id)
+    // show author route 
+    router.get('/:id', async(req, res) => {
+        try {
+            const author = await Author.findById(req.params.id)
+            const books = await Books.find({ author : author.id }).limit(6).exec()
+            res.render('authors/show', {
+                author : author,
+                booksByAuthor : books
+            })
+        } catch {
+            res.redirect('/')
+        }
     });
 
+
+    // Edit author
     router.get('/:id/edit', async(req, res) => {
         try{
             const author = await Author.findById(req.params.id)
@@ -98,3 +111,4 @@ router.post('/', async(req, res) => {
       })
 
 module.exports = router; 
+
