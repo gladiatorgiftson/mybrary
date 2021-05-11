@@ -1,0 +1,7 @@
+<h2>Edit Books</h2>
+
+<form action="/books/<%= book.id %>?_method=PUT" method="post"> 
+    <%- include('form_fields.ejs') %> 
+    <a href="/books">Cancel</a>
+    <button type="submit">Update</button>
+</form>
